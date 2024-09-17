@@ -10,17 +10,17 @@
   </div>
 </template>
 
-<script>
-import { useHistoryStore } from '../stores/history'
+<script lang="ts">
+import { useHistoryStore } from '../stores/history';
 
 export default {
   computed: {
     searches() {
-      const historyStore = useHistoryStore()
-      return historyStore.searches
+      const historyStore = useHistoryStore();
+      return historyStore.searches;
     }
   }
-}
+};
 </script>
 
 <style>

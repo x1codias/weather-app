@@ -18,11 +18,11 @@
 export default {
   methods: {
     changeLanguage(lang: string) {
-      this.$i18n.locale = lang
+      this.$i18n.locale = lang;
     },
     goTo(path: string) {
-      this.$router.push(path)
+      this.$router.push(path);
     }
   }
-}
+};
 </script>
