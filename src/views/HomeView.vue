@@ -13,7 +13,6 @@
       </button>
     </div>
     <div id="map"></div>
-    <div class="forecast"></div>
     <div class="forecast" v-if="forecastData">
       <ul>
         <li v-for="forecast in forecastData.data.list" :key="forecast.dt">
@@ -29,7 +28,6 @@
 import L from 'leaflet';
 import { getFiveDayForecast, type Forecast } from '../services/weatherService';
 import { useHistoryStore } from '../stores/history';
-import moment from 'moment';
 import { OhVueIcon } from 'oh-vue-icons';
 
 export default {
@@ -42,14 +40,12 @@ export default {
       forecastData: null as Forecast | null,
       map: null as L.Map | null,
       marker: null as L.Marker | null,
-      today: '',
       loading: false
     };
   },
   mounted() {
     this.initializeMap();
     window.addEventListener('resize', this.onResize);
-    this.today = `${moment().locale(this.$i18n.locale).format('dddd')},  ${moment().weekday()}`;
   },
   beforeUnmount() {
     window.removeEventListener('resize', this.onResize);
