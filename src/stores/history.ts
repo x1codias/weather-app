@@ -1,7 +1,14 @@
 import { defineStore } from 'pinia';
 
+export type HistoryState = {
+  searches: {
+    city: string;
+    date: string;
+  }[];
+};
+
 export const useHistoryStore = defineStore('history', {
-  state: () => ({
+  state: (): HistoryState => ({
     searches: []
   }),
   actions: {

@@ -1,14 +1,62 @@
 <template>
   <div class="grid-container">
     <div class="search-history">
-      <ul>
-        <li v-for="search in searches" :key="search.date" @click="fetchWeather(search.city)">
+      <div v-for="search in searches" :key="search.date" @click="fetchWeather(search.city)">
+        <p style="background-color: gray; padding: 2px 6px; border-radius: 20px; cursor: pointer">
           {{ search.city }} - {{ search.date }}
-        </li>
-      </ul>
+        </p>
+      </div>
     </div>
     <div id="map-history"></div>
-    <div class="forecast"></div>
+    <div class="forecast" v-if="!forecastData">
+      <h2 style="align-self: center; margin: 0 auto">
+        {{ $t('searchFirst') }}
+      </h2>
+    </div>
+    <div class="forecast forecast-grid" v-if="forecastData">
+      <div class="weather-card" v-for="forecast in forecastData.data.list" :key="forecast.dt">
+        <h2
+          style="background-color: grey; width: fit-content; padding: 2px 10px; border-radius: 20px"
+        >
+          {{ formatDate(forecast.dt_txt) }}
+        </h2>
+        <div style="display: flex; align-items: center; width: fit-content; gap: 16px">
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              width: fit-content;
+              gap: 4px;
+            "
+          >
+            <img
+              style="background-color: gray; border-radius: 20px"
+              :src="getWeatherIcon(forecast.weather[0].icon)"
+              alt="Weather Icon"
+            />
+            <h3 style="background-color: gray; border-radius: 20px; padding: 2px 16px">
+              {{ forecast.weather[0].main }}
+            </h3>
+          </div>
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              width: fit-content;
+              gap: 16px;
+              background-color: gray;
+              padding: 12px;
+              border-radius: 20px;
+            "
+          >
+            <h2>{{ forecast.main.temp }} °C</h2>
+            <h4>{{ forecast.main.temp_min }} / {{ forecast.main.temp_max }} °C</h4>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -16,6 +64,7 @@
 import L from 'leaflet';
 import { getFiveDayForecast, type Forecast } from '@/services/weatherService';
 import { useHistoryStore } from '../stores/history';
+import moment from 'moment';
 
 export default {
   data() {
@@ -86,6 +135,9 @@ export default {
     onResize() {
       // Invalidate the map size on window resize
       this.map?.invalidateSize();
+    },
+    formatDate(date: string) {
+      return moment(date).locale(this.$i18n.locale).format('MMMM, DD');
     }
   }
 };
@@ -105,8 +157,12 @@ export default {
 .search-history {
   grid-column: 1 / 3;
   grid-row: 1 / 2;
-  background-color: lightblue;
+  padding: 10px;
+  border: 2px solid lightblue;
   border-radius: 20px;
+  display: flex;
+  gap: 12px;
+  overflow: auto;
 }
 #map-history {
   grid-column: 1 / 2;
