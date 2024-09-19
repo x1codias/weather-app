@@ -1,3 +1,16 @@
+<script setup lang="ts">
+import { OhVueIcon } from 'oh-vue-icons';
+import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+
+const { locale, t } = useI18n();
+const { push } = useRouter();
+
+const changeLanguage = (lang: string) => {
+  locale.value = lang;
+};
+</script>
+
 <template>
   <div>
     <div style="display: flex; align-items: center; justify-content: space-between">
@@ -5,62 +18,44 @@
         <button
           :disabled="!$route.path.includes('history')"
           :class="$route.path.includes('history') ? 'btn header-btn' : 'btn header-btn-active'"
-          @click="goTo('/')"
+          @click="push('/')"
         >
-          <h2>{{ $t('home') }}</h2>
+          <h2>{{ t('home') }}</h2>
         </button>
         <button
           :disabled="$route.path.includes('history')"
           :class="!$route.path.includes('history') ? 'btn header-btn' : 'btn header-btn-active'"
-          @click="goTo('/history')"
+          @click="push('/history')"
         >
-          <h2>{{ $t('history') }}</h2>
+          <h2>{{ t('history') }}</h2>
         </button>
       </div>
       <div>
         <button
           :class="
-            $i18n.locale === 'pt'
+            locale === 'pt'
               ? 'transl-btn transl-btn-left transl-btn-hover'
               : 'transl-btn transl-btn-left transl-btn-active'
           "
           @click="changeLanguage('en')"
         >
-          <v-icon name="fi-gb" scale="1.5" />
+          <oh-vue-icon name="fi-gb" scale="1.5" />
         </button>
         <button
           :class="
-            $i18n.locale === 'en'
+            locale === 'en'
               ? 'transl-btn transl-btn-right transl-btn-hover'
               : 'transl-btn transl-btn-right transl-btn-active'
           "
           @click="changeLanguage('pt')"
         >
-          <v-icon name="fi-pt" scale="1.5" />
+          <oh-vue-icon name="fi-pt" scale="1.5" />
         </button>
       </div>
     </div>
     <router-view></router-view>
   </div>
 </template>
-
-<script lang="ts">
-import { OhVueIcon } from 'oh-vue-icons';
-
-export default {
-  components: {
-    'v-icon': OhVueIcon
-  },
-  methods: {
-    changeLanguage(lang: string) {
-      this.$i18n.locale = lang;
-    },
-    goTo(path: string) {
-      this.$router.push(path);
-    }
-  }
-};
-</script>
 
 <style>
 .btn {
