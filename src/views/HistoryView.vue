@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import L from 'leaflet';
 import { type Forecast } from '@/services/weatherService';
-import { useHistoryStore } from '../stores/history';
+import { useHistoryStore, type HistoryState } from '../stores/history';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import FiveDayWeather from '@/utils/components/FiveDayWeather.vue';
@@ -9,15 +8,19 @@ import { fetchWeather } from '@/utils/functions/fetchWeather';
 import { useMap } from '@/utils/composables/useMap';
 
 const forecast = ref<Forecast | null>(null);
-const map = ref<L.Map | null>(null);
-const marker = ref<L.Marker | null>(null);
 const loading = ref<boolean>(false);
-
 const { searches, deleteSearch } = useHistoryStore();
+const searchResults = ref<HistoryState[]>(searches);
 
 const { locale, t } = useI18n();
 
-useMap(map, marker);
+const { map, marker } = useMap();
+
+const resetSearch = (e: MouseEvent) => {
+  e.preventDefault();
+  deleteSearch();
+  searchResults.value = [];
+};
 
 const getWeather = async (city: string) => {
   await fetchWeather(loading, city, locale.value, forecast, map, marker);
@@ -26,13 +29,13 @@ const getWeather = async (city: string) => {
 
 <template>
   <div class="search-history">
-    <h4 style="padding: 10px" v-if="!searches.length">
+    <h4 style="padding: 10px" v-if="!searchResults.length">
       {{ t('searchHistoryEmpty') }}
     </h4>
     <div style="display: flex; align-items: center; gap: 12px">
       <div
         style="padding: 10px"
-        v-for="search in searches"
+        v-for="search in searchResults"
         :key="search.date"
         @click="getWeather(search.city)"
       >
@@ -41,7 +44,7 @@ const getWeather = async (city: string) => {
         </p>
       </div>
     </div>
-    <button v-if="searches.length" @click="deleteSearch" class="delete-history-btn">
+    <button v-if="searchResults.length" @click="resetSearch" class="delete-history-btn">
       <h4>{{ t('resetHistory') }}</h4>
     </button>
   </div>

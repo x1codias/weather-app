@@ -11,14 +11,12 @@ import { OhVueIcon } from 'oh-vue-icons';
 
 const city = ref('');
 const forecast = ref<Forecast | null>(null);
-const map = ref<L.Map | null>(null);
-const marker = ref<L.Marker | null>(null);
 const loading = ref(false);
 const { addSearch } = useHistoryStore();
 
 const { locale, t } = useI18n();
 
-useMap(map, marker);
+const { map, marker } = useMap();
 
 const getWeather = async (city: string) => {
   await fetchWeather(loading, city, locale.value, forecast, map, marker, addSearch);

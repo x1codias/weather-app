@@ -1,8 +1,10 @@
-import type { Map, Marker } from 'leaflet';
 import L from 'leaflet';
-import { nextTick, onBeforeUnmount, onMounted } from 'vue';
+import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
 
-export const useMap = (map: { value: Map | null }, marker: { value: Marker | null }) => {
+export const useMap = () => {
+  const map = ref<L.Map | null>(null);
+  const marker = ref<L.Marker | null>(null);
+
   const initializeMap = () => {
     // Initialize the map with default coordinates
     map.value = L.map('map').setView([51.505, -0.09], 12);
@@ -33,4 +35,6 @@ export const useMap = (map: { value: Map | null }, marker: { value: Marker | nul
   onBeforeUnmount(() => {
     window.removeEventListener('resize', onResize);
   });
+
+  return { map, marker };
 };
