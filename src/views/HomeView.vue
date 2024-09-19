@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import L from 'leaflet';
-import { getFiveDayForecast, type Forecast } from '../services/weatherService';
+import { type Forecast } from '../services/weatherService';
 import { useHistoryStore } from '../stores/history';
-import FiveDayWeather from '@/components/FiveDayWeather.vue';
+import FiveDayWeather from '@/utils/components/FiveDayWeather.vue';
 import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { fetchWeather } from '@/utils/functions/fetchWeather';
 
 const city = ref('');
 const forecast = ref<Forecast | null>(null);
@@ -32,32 +33,8 @@ const initializeMap = () => {
   });
 };
 
-const fetchWeather = async () => {
-  loading.value = true;
-  try {
-    const forecastData = await getFiveDayForecast(city.value, locale.value);
-    forecast.value = forecastData;
-
-    // Extract coordinates from the weather data
-    const { lat, lon } = forecastData.data.city.coord;
-
-    // Update the map's view to the city's coordinates
-    if (map.value) {
-      map.value?.setView([lat, lon], 14);
-
-      // Update the marker position
-      if (marker.value) {
-        marker.value?.setLatLng([lat, lon]);
-      }
-    }
-
-    // Save search to history
-    addSearch({ city: city.value, date: new Date().toLocaleString() });
-    loading.value = false;
-  } catch (error) {
-    loading.value = false;
-    console.error('Error fetching weather:', error);
-  }
+const getWeather = async (city: string) => {
+  await fetchWeather(loading, city, locale.value, forecast, map, marker, addSearch);
 };
 
 const onResize = () => {
@@ -82,10 +59,10 @@ onBeforeUnmount(() => {
         class="search-input"
         v-model="city"
         :placeholder="t('searchCity')"
-        @keyup.enter="fetchWeather"
+        @keyup.enter="getWeather(city)"
         :disabled="loading"
       />
-      <button class="search-btn" :disabled="loading" @click="fetchWeather">
+      <button class="search-btn" :disabled="loading" @click="getWeather(city)">
         <v-icon name="fa-search" fill="gray" />
       </button>
     </div>

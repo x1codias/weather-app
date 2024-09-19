@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import L from 'leaflet';
-import { getFiveDayForecast, type Forecast } from '@/services/weatherService';
+import { type Forecast } from '@/services/weatherService';
 import { useHistoryStore } from '../stores/history';
 import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import FiveDayWeather from '@/components/FiveDayWeather.vue';
+import FiveDayWeather from '@/utils/components/FiveDayWeather.vue';
+import { fetchWeather } from '@/utils/functions/fetchWeather';
 
 const forecast = ref<Forecast | null>(null);
 const map = ref<L.Map | null>(null);
@@ -32,29 +33,8 @@ const initializeMap = () => {
   });
 };
 
-const fetchWeather = async (city: string) => {
-  loading.value = true;
-  try {
-    const forecastData = await getFiveDayForecast(city, locale.value);
-    forecast.value = forecastData;
-
-    // Extract coordinates from the weather data
-    const { lat, lon } = forecastData.data.city.coord;
-
-    // Update the map's view to the city's coordinates
-    if (map.value) {
-      map.value?.setView([lat, lon], 14);
-
-      // Update the marker position
-      if (marker.value) {
-        marker.value?.setLatLng([lat, lon]);
-      }
-    }
-    loading.value = false;
-  } catch (error) {
-    loading.value = false;
-    console.error('Error fetching weather:', error);
-  }
+const getWeather = async (city: string) => {
+  await fetchWeather(loading, city, locale.value, forecast, map, marker);
 };
 
 const onResize = () => {
@@ -78,15 +58,19 @@ onBeforeUnmount(() => {
       <h4 style="padding: 10px" v-if="!searches.length">
         {{ t('searchHistoryEmpty') }}
       </h4>
-      <div
-        style="padding: 10px"
-        v-for="search in searches"
-        :key="search.date"
-        @click="fetchWeather(search.city)"
-      >
-        <p style="background-color: gray; padding: 2px 10px; border-radius: 20px; cursor: pointer">
-          {{ search.city }} - {{ search.date }}
-        </p>
+      <div style="display: flex; align-items: center; gap: 12px">
+        <div
+          style="padding: 10px"
+          v-for="search in searches"
+          :key="search.date"
+          @click="getWeather(search.city)"
+        >
+          <p
+            style="background-color: gray; padding: 2px 10px; border-radius: 20px; cursor: pointer"
+          >
+            {{ search.city }} - {{ search.date }}
+          </p>
+        </div>
       </div>
       <button v-if="searches.length" @click="deleteSearch" class="delete-history-btn">
         <h4>{{ t('resetHistory') }}</h4>
