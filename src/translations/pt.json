@@ -1,6 +1,8 @@
 {
-  "weather": "Clima",
+  "home": "Início",
   "history": "Histórico",
   "searchCity": "Pesquisar cidade",
-  "searchFirst": "Pesquise primeiro para poder ver a meteorologia dos próximos 5 dias da cidade pretendida"
+  "searchFirst": "Pesquise primeiro para poder ver a meteorologia dos próximos 5 dias da cidade pretendida",
+  "searchHistoryEmpty": "Nenhuma pesquisa feita ainda",
+  "resetHistory": "Apagar histórico"
 }

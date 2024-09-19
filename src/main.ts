@@ -6,12 +6,13 @@ import { createI18n } from 'vue-i18n';
 import './assets/main.css';
 import { addIcons, OhVueIcon } from 'oh-vue-icons';
 import * as FaIcons from 'oh-vue-icons/icons/fa';
+import * as FlagIcons from 'oh-vue-icons/icons/fi';
 import en from './translations/en.json';
 import pt from './translations/pt.json';
 
-const Fa = Object.values({ ...FaIcons });
+const icons = Object.values({ ...FaIcons, ...FlagIcons });
 
-addIcons(...Fa);
+addIcons(...icons);
 
 const pinia = createPinia();
 const i18n = createI18n({

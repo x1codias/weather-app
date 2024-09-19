@@ -1,11 +1,25 @@
 <template>
   <div class="grid-container">
     <div class="search-history">
+      <h4 style="padding: 10px" v-if="!searches.length">
+        {{ $t('searchHistoryEmpty') }}
+      </h4>
       <div v-for="search in searches" :key="search.date" @click="fetchWeather(search.city)">
         <p style="background-color: gray; padding: 2px 6px; border-radius: 20px; cursor: pointer">
           {{ search.city }} - {{ search.date }}
         </p>
       </div>
+      <button
+        style="
+          width: fit-content;
+          cursor: pointer;
+          border: none;
+          outline: unset;
+          background-color: transparent;
+        "
+      >
+        {{ $t('resetHistory') }}
+      </button>
     </div>
     <div id="map-history"></div>
     <div class="forecast" v-if="!forecastData">
@@ -91,7 +105,7 @@ export default {
   methods: {
     initializeMap() {
       // Initialize the map with default coordinates
-      this.map = L.map('map-history').setView([51.505, -0.09], 13);
+      this.map = L.map('map-history').setView([51.505, -0.09], 12);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution:
@@ -157,12 +171,12 @@ export default {
 .search-history {
   grid-column: 1 / 3;
   grid-row: 1 / 2;
-  padding: 10px;
-  border: 2px solid lightblue;
-  border-radius: 20px;
+  border: 2px solid gray;
+  border-radius: 30px;
   display: flex;
   gap: 12px;
   overflow: auto;
+  justify-content: space-between;
 }
 #map-history {
   grid-column: 1 / 2;

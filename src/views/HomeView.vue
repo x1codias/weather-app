@@ -9,7 +9,7 @@
         :disabled="loading"
       />
       <button class="search-btn" :disabled="loading" @click="fetchWeather">
-        <v-icon name="fa-search" />
+        <v-icon name="fa-search" fill="gray" />
       </button>
     </div>
     <div id="map"></div>
@@ -73,9 +73,6 @@ import { OhVueIcon } from 'oh-vue-icons';
 import moment from 'moment';
 
 export default {
-  components: {
-    'v-icon': OhVueIcon
-  },
   data() {
     return {
       city: '',
@@ -95,7 +92,7 @@ export default {
   methods: {
     initializeMap() {
       // Initialize the map with default coordinates
-      this.map = L.map('map').setView([51.505, -0.09], 13);
+      this.map = L.map('map').setView([51.505, -0.09], 12);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution:
@@ -201,10 +198,19 @@ export default {
 }
 .search-btn {
   padding: 10px;
-  border-radius: 20px;
+  border-radius: 30px;
   outline: none;
   border: none;
   cursor: pointer;
+  background-color: transparent;
+  border: 2px solid gray;
+  transition: all 0.2s ease;
+  &:hover {
+    background-color: gray;
+  }
+  &:hover > svg {
+    fill: black;
+  }
 }
 .weather-card {
   background-color: #ccc;
