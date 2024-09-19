@@ -20,7 +20,7 @@ export const fetchWeather = async (
 
     // Update the map's view to the city's coordinates
     if (map.value) {
-      map.value.setView([lat, lon], 14);
+      map.value.setView([lat, lon], 12);
 
       // Update the marker position
       if (marker.value) {
@@ -30,12 +30,12 @@ export const fetchWeather = async (
 
     // Save search to history
     if (addSearch) {
-      addSearch({ city: city, date: new Date().toLocaleString() });
+      addSearch({ city: forecastData.data.city.name, date: new Date().toLocaleString() });
     }
 
     loading.value = false;
   } catch (error) {
-    loading = false;
+    loading.value = false;
     console.error('Error fetching weather:', error);
   }
 };

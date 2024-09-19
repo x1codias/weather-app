@@ -53,7 +53,9 @@ const changeLanguage = (lang: string) => {
         </button>
       </div>
     </div>
-    <router-view></router-view>
+    <div class="grid-container">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -99,5 +101,21 @@ const changeLanguage = (lang: string) => {
 }
 .transl-btn-active {
   background-color: gray;
+}
+.grid-container {
+  padding: 60px 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  column-gap: 14px;
+  row-gap: 24px;
+  align-content: center;
+  justify-content: center;
+}
+#map {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  border-radius: 20px;
+  min-height: 700px;
 }
 </style>

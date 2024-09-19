@@ -2,10 +2,11 @@
 import L from 'leaflet';
 import { type Forecast } from '@/services/weatherService';
 import { useHistoryStore } from '../stores/history';
-import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import FiveDayWeather from '@/utils/components/FiveDayWeather.vue';
 import { fetchWeather } from '@/utils/functions/fetchWeather';
+import { useMap } from '@/utils/composables/useMap';
 
 const forecast = ref<Forecast | null>(null);
 const map = ref<L.Map | null>(null);
@@ -16,87 +17,44 @@ const { searches, deleteSearch } = useHistoryStore();
 
 const { locale, t } = useI18n();
 
-const initializeMap = () => {
-  // Initialize the map with default coordinates
-  map.value = L.map('map-history').setView([51.505, -0.09], 12);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(map.value);
-
-  marker.value = L.marker([51.505, -0.09]).addTo(map.value);
-
-  // Invalidate size to make sure map is rendered correctly
-  nextTick(() => {
-    map.value?.invalidateSize();
-  });
-};
+useMap(map, marker);
 
 const getWeather = async (city: string) => {
   await fetchWeather(loading, city, locale.value, forecast, map, marker);
 };
-
-const onResize = () => {
-  // Invalidate the map size on window resize
-  map.value?.invalidateSize();
-};
-
-onMounted(() => {
-  initializeMap();
-  window.addEventListener('resize', onResize);
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', onResize);
-});
 </script>
 
 <template>
-  <div class="grid-container">
-    <div class="search-history">
-      <h4 style="padding: 10px" v-if="!searches.length">
-        {{ t('searchHistoryEmpty') }}
-      </h4>
-      <div style="display: flex; align-items: center; gap: 12px">
-        <div
-          style="padding: 10px"
-          v-for="search in searches"
-          :key="search.date"
-          @click="getWeather(search.city)"
-        >
-          <p
-            style="background-color: gray; padding: 2px 10px; border-radius: 20px; cursor: pointer"
-          >
-            {{ search.city }} - {{ search.date }}
-          </p>
-        </div>
+  <div class="search-history">
+    <h4 style="padding: 10px" v-if="!searches.length">
+      {{ t('searchHistoryEmpty') }}
+    </h4>
+    <div style="display: flex; align-items: center; gap: 12px">
+      <div
+        style="padding: 10px"
+        v-for="search in searches"
+        :key="search.date"
+        @click="getWeather(search.city)"
+      >
+        <p style="background-color: gray; padding: 2px 10px; border-radius: 20px; cursor: pointer">
+          {{ search.city }} - {{ search.date }}
+        </p>
       </div>
-      <button v-if="searches.length" @click="deleteSearch" class="delete-history-btn">
-        <h4>{{ t('resetHistory') }}</h4>
-      </button>
     </div>
-    <div id="map-history"></div>
-    <div class="forecast" v-if="!forecast">
-      <h2 style="align-self: center; margin: 0 auto">
-        {{ t('searchFirst') }}
-      </h2>
-    </div>
-    <FiveDayWeather :forecast="forecast" :loading="loading" />
+    <button v-if="searches.length" @click="deleteSearch" class="delete-history-btn">
+      <h4>{{ t('resetHistory') }}</h4>
+    </button>
   </div>
+  <div id="map"></div>
+  <div class="forecast" v-if="!forecast">
+    <h2 style="align-self: center; margin: 0 auto">
+      {{ t('searchFirst') }}
+    </h2>
+  </div>
+  <FiveDayWeather :forecast="forecast" :loading="loading" />
 </template>
 
 <style>
-.grid-container {
-  padding: 60px 40px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto 1fr;
-  column-gap: 14px;
-  row-gap: 24px;
-  align-content: center;
-  justify-content: center;
-}
 .search-history {
   grid-column: 1 / 3;
   grid-row: 1 / 2;
@@ -106,12 +64,6 @@ onBeforeUnmount(() => {
   gap: 12px;
   overflow: auto;
   justify-content: space-between;
-}
-#map-history {
-  grid-column: 1 / 2;
-  grid-row: 2 / 3;
-  border-radius: 20px;
-  min-height: 700px;
 }
 .forecast-history {
   grid-column: 1 / 3;
