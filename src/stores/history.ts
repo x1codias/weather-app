@@ -1,22 +1,21 @@
 import { defineStore } from 'pinia';
+import { ref } from 'vue';
 
 export type HistoryState = {
-  searches: {
-    city: string;
-    date: string;
-  }[];
+  city: string;
+  date: string;
 };
 
-export const useHistoryStore = defineStore('history', {
-  state: (): HistoryState => ({
-    searches: []
-  }),
-  actions: {
-    addSearch(search: { city: string; date: string }) {
-      this.searches.push(search);
-    },
-    deleteSearch() {
-      this.searches = [];
-    }
-  }
+export const useHistoryStore = defineStore('history', () => {
+  const searches = ref<HistoryState[]>([]);
+
+  const addSearch = (search: { city: string; date: string }) => {
+    searches.value.push(search);
+  };
+
+  const deleteSearch = () => {
+    searches.value = [];
+  };
+
+  return { searches, addSearch, deleteSearch };
 });

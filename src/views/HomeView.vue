@@ -11,6 +11,7 @@ const forecast = ref<Forecast | null>(null);
 const map = ref<L.Map | null>(null);
 const marker = ref<L.Marker | null>(null);
 const loading = ref(false);
+const { addSearch } = useHistoryStore();
 
 const { locale, t } = useI18n();
 
@@ -51,8 +52,7 @@ const fetchWeather = async () => {
     }
 
     // Save search to history
-    const historyStore = useHistoryStore();
-    historyStore.addSearch({ city: city.value, date: new Date().toLocaleString() });
+    addSearch({ city: city.value, date: new Date().toLocaleString() });
     loading.value = false;
   } catch (error) {
     loading.value = false;

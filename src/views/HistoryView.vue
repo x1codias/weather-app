@@ -11,17 +11,9 @@ const map = ref<L.Map | null>(null);
 const marker = ref<L.Marker | null>(null);
 const loading = ref<boolean>(false);
 
-const historyStore = useHistoryStore();
+const { searches, deleteSearch } = useHistoryStore();
 
 const { locale, t } = useI18n();
-
-const searches = () => {
-  return historyStore.searches;
-};
-
-const deleteSearches = () => {
-  historyStore.deleteSearch();
-};
 
 const initializeMap = () => {
   // Initialize the map with default coordinates
@@ -96,7 +88,7 @@ onBeforeUnmount(() => {
           {{ search.city }} - {{ search.date }}
         </p>
       </div>
-      <button v-if="searches.length" @click="deleteSearches" class="delete-history-btn">
+      <button v-if="searches.length" @click="deleteSearch" class="delete-history-btn">
         <h4>{{ t('resetHistory') }}</h4>
       </button>
     </div>
