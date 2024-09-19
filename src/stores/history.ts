@@ -14,6 +14,9 @@ export const useHistoryStore = defineStore('history', {
   actions: {
     addSearch(search: { city: string; date: string }) {
       this.searches.push(search);
+    },
+    deleteSearch() {
+      this.searches = [];
     }
   }
 });

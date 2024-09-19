@@ -4,21 +4,18 @@
       <h4 style="padding: 10px" v-if="!searches.length">
         {{ $t('searchHistoryEmpty') }}
       </h4>
-      <div v-for="search in searches" :key="search.date" @click="fetchWeather(search.city)">
-        <p style="background-color: gray; padding: 2px 6px; border-radius: 20px; cursor: pointer">
+      <div
+        style="padding: 10px"
+        v-for="search in searches"
+        :key="search.date"
+        @click="fetchWeather(search.city)"
+      >
+        <p style="background-color: gray; padding: 2px 10px; border-radius: 20px; cursor: pointer">
           {{ search.city }} - {{ search.date }}
         </p>
       </div>
-      <button
-        style="
-          width: fit-content;
-          cursor: pointer;
-          border: none;
-          outline: unset;
-          background-color: transparent;
-        "
-      >
-        {{ $t('resetHistory') }}
+      <button @click="deleteSearches" class="delete-history-btn">
+        <h4>{{ $t('resetHistory') }}</h4>
       </button>
     </div>
     <div id="map-history"></div>
@@ -103,6 +100,10 @@ export default {
     }
   },
   methods: {
+    deleteSearches() {
+      const historyStore = useHistoryStore();
+      historyStore.deleteSearch();
+    },
     initializeMap() {
       // Initialize the map with default coordinates
       this.map = L.map('map-history').setView([51.505, -0.09], 12);
@@ -188,5 +189,20 @@ export default {
   grid-column: 1 / 3;
   grid-row: 2 / 3;
   background-color: lightgreen;
+}
+.delete-history-btn {
+  width: fit-content;
+  cursor: pointer;
+  border: none;
+  outline: unset;
+  background-color: transparent;
+  border-left: 2px solid gray;
+  padding: 0 16px;
+  color: gray;
+  transition: all 0.2s ease;
+  &:hover {
+    color: black;
+    background-color: gray;
+  }
 }
 </style>
