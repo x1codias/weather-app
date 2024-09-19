@@ -1,4 +1,4 @@
-import L from 'leaflet';
+import L, { Map } from 'leaflet';
 import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
 
 export const useMap = () => {
@@ -12,9 +12,9 @@ export const useMap = () => {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map.value);
+    }).addTo(map.value as Map);
 
-    marker.value = L.marker([51.505, -0.09]).addTo(map.value);
+    marker.value = L.marker([51.505, -0.09]).addTo(map.value as Map);
 
     // Invalidate size to make sure map is rendered correctly
     nextTick(() => {

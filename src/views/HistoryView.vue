@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n';
 import FiveDayWeather from '@/utils/components/FiveDayWeather.vue';
 import { fetchWeather } from '@/utils/functions/fetchWeather';
 import { useMap } from '@/utils/composables/useMap';
+import type { Map, Marker } from 'leaflet';
 
 const forecast = ref<Forecast | null>(null);
 const loading = ref<boolean>(false);
@@ -23,7 +24,14 @@ const resetSearch = (e: MouseEvent) => {
 };
 
 const getWeather = async (city: string) => {
-  await fetchWeather(loading, city, locale.value, forecast, map, marker);
+  await fetchWeather(
+    loading,
+    city,
+    locale.value,
+    forecast,
+    map.value as Map | null,
+    marker.value as Marker | null
+  );
 };
 </script>
 
@@ -32,18 +40,35 @@ const getWeather = async (city: string) => {
     <h4 style="padding: 10px" v-if="!searchResults.length">
       {{ t('searchHistoryEmpty') }}
     </h4>
-    <div style="display: flex; align-items: center; gap: 12px">
+    <PerfectScrollbar
+      v-if="searchResults.length"
+      :options="{
+        useBothWheelAxes: true,
+        wheelPropagation: true,
+        suppressScrollY: true,
+        swipeEasing: true,
+        maxScrollbarLength: 1000
+      }"
+    >
       <div
         style="padding: 10px"
         v-for="search in searchResults"
         :key="search.date"
         @click="getWeather(search.city)"
       >
-        <p style="background-color: gray; padding: 2px 10px; border-radius: 20px; cursor: pointer">
+        <p
+          style="
+            background-color: gray;
+            padding: 2px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            white-space: nowrap;
+          "
+        >
           {{ search.city }} - {{ search.date }}
         </p>
       </div>
-    </div>
+    </PerfectScrollbar>
     <button v-if="searchResults.length" @click="resetSearch" class="delete-history-btn">
       <h4>{{ t('resetHistory') }}</h4>
     </button>
@@ -58,16 +83,30 @@ const getWeather = async (city: string) => {
 </template>
 
 <style>
+@import 'vue3-perfect-scrollbar/style.css';
+
+.ps {
+  display: flex;
+  padding: 10px 0;
+}
 .search-history {
   grid-column: 1 / 3;
   grid-row: 1 / 2;
   border: 2px solid gray;
   border-radius: 30px;
   display: flex;
-  gap: 12px;
   overflow: auto;
   justify-content: space-between;
 }
+
+.search-history-results {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  overflow: auto;
+}
+
 .forecast-history {
   grid-column: 1 / 3;
   grid-row: 2 / 3;

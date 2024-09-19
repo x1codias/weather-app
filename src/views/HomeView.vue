@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import L from 'leaflet';
+import { Map, Marker } from 'leaflet';
 import { type Forecast } from '../services/weatherService';
 import { useHistoryStore } from '../stores/history';
 import FiveDayWeather from '@/utils/components/FiveDayWeather.vue';
@@ -19,7 +19,15 @@ const { locale, t } = useI18n();
 const { map, marker } = useMap();
 
 const getWeather = async (city: string) => {
-  await fetchWeather(loading, city, locale.value, forecast, map, marker, addSearch);
+  await fetchWeather(
+    loading,
+    city,
+    locale.value,
+    forecast,
+    map.value as Map | null,
+    marker.value as Marker | null,
+    addSearch
+  );
 };
 </script>
 

@@ -6,8 +6,8 @@ export const fetchWeather = async (
   city: string,
   locale: string,
   forecast: { value: Forecast | null },
-  map: { value: Map | null },
-  marker: { value: Marker | null },
+  map: Map | null,
+  marker: Marker | null,
   addSearch?: (val: { city: string; date: string }) => void
 ) => {
   loading.value = true;
@@ -19,12 +19,12 @@ export const fetchWeather = async (
     const { lat, lon } = forecastData.data.city.coord;
 
     // Update the map's view to the city's coordinates
-    if (map.value) {
-      map.value.setView([lat, lon], 12);
+    if (map) {
+      map.setView([lat, lon], 12);
 
       // Update the marker position
-      if (marker.value) {
-        marker.value.setLatLng([lat, lon]);
+      if (marker) {
+        marker.setLatLng([lat, lon]);
       }
     }
 

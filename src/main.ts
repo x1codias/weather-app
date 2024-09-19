@@ -9,6 +9,7 @@ import * as FaIcons from 'oh-vue-icons/icons/fa';
 import * as FlagIcons from 'oh-vue-icons/icons/fi';
 import en from './translations/en.json';
 import pt from './translations/pt.json';
+import { PerfectScrollbarPlugin } from 'vue3-perfect-scrollbar';
 
 const icons = Object.values({ ...FaIcons, ...FlagIcons });
 
@@ -27,5 +28,6 @@ const app = createApp(App);
 app.use(pinia);
 app.use(router);
 app.use(i18n);
+app.use(PerfectScrollbarPlugin);
 app.component('v-icon', OhVueIcon);
 app.mount('#app');
