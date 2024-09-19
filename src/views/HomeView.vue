@@ -7,8 +7,6 @@ import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { fetchWeather } from '@/utils/functions/fetchWeather';
 import { useMap } from '@/utils/composables/useMap';
-import { OhVueIcon } from 'oh-vue-icons';
-
 const city = ref('');
 const forecast = ref<Forecast | null>(null);
 const loading = ref(false);
@@ -41,16 +39,17 @@ const getWeather = async (city: string) => {
       :disabled="loading"
     />
     <button class="search-btn" :disabled="loading" @click="getWeather(city)">
-      <oh-vue-icon name="fa-search" fill="gray" />
+      <v-icon name="fa-search" fill="gray" />
     </button>
   </div>
   <div id="map"></div>
-  <div class="forecast" v-if="!forecast">
+  <div class="forecast" v-if="!forecast && !loading">
     <h2 style="align-self: center; margin: 0 auto">
       {{ t('searchFirst') }}
     </h2>
   </div>
-  <FiveDayWeather :forecast="forecast" :loading="loading" />
+  <FiveDayWeather v-if="forecast && !loading" :forecast="forecast" :loading="loading" />
+  <VueSpinnerDots v-if="!forecast && loading" />
 </template>
 
 <style>
@@ -85,5 +84,11 @@ const getWeather = async (city: string) => {
   &:hover > svg {
     fill: black;
   }
+}
+#map {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  border-radius: 20px;
+  min-height: 700px;
 }
 </style>

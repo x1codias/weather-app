@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { OhVueIcon } from 'oh-vue-icons';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
@@ -16,6 +15,7 @@ const changeLanguage = (lang: string) => {
     <div style="display: flex; align-items: center; justify-content: space-between">
       <div style="display: flex; align-items: center">
         <button
+          id="home-btn"
           :disabled="!$route.path.includes('history')"
           :class="$route.path.includes('history') ? 'btn header-btn' : 'btn header-btn-active'"
           @click="push('/')"
@@ -23,6 +23,7 @@ const changeLanguage = (lang: string) => {
           <h2>{{ t('home') }}</h2>
         </button>
         <button
+          id="history-btn"
           :disabled="$route.path.includes('history')"
           :class="!$route.path.includes('history') ? 'btn header-btn' : 'btn header-btn-active'"
           @click="push('/history')"
@@ -32,6 +33,7 @@ const changeLanguage = (lang: string) => {
       </div>
       <div>
         <button
+          id="en-btn"
           :class="
             locale === 'pt'
               ? 'transl-btn transl-btn-left transl-btn-hover'
@@ -39,9 +41,10 @@ const changeLanguage = (lang: string) => {
           "
           @click="changeLanguage('en')"
         >
-          <oh-vue-icon name="fi-gb" scale="1.5" />
+          <v-icon name="fi-gb" scale="1.5" />
         </button>
         <button
+          id="pt-btn"
           :class="
             locale === 'en'
               ? 'transl-btn transl-btn-right transl-btn-hover'
@@ -49,7 +52,7 @@ const changeLanguage = (lang: string) => {
           "
           @click="changeLanguage('pt')"
         >
-          <oh-vue-icon name="fi-pt" scale="1.5" />
+          <v-icon name="fi-pt" scale="1.5" />
         </button>
       </div>
     </div>
@@ -111,11 +114,5 @@ const changeLanguage = (lang: string) => {
   row-gap: 24px;
   align-content: center;
   justify-content: center;
-}
-#map {
-  grid-column: 1 / 2;
-  grid-row: 2 / 3;
-  border-radius: 20px;
-  min-height: 700px;
 }
 </style>

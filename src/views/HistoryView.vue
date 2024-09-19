@@ -70,16 +70,17 @@ const getWeather = async (city: string) => {
       </div>
     </PerfectScrollbar>
     <button v-if="searchResults.length" @click="resetSearch" class="delete-history-btn">
-      <h4>{{ t('resetHistory') }}</h4>
+      <h3 style="font-weight: 600">{{ t('resetHistory') }}</h3>
     </button>
   </div>
   <div id="map"></div>
-  <div class="forecast" v-if="!forecast">
+  <div class="forecast" v-if="!forecast && !loading">
     <h2 style="align-self: center; margin: 0 auto">
       {{ t('searchFirst') }}
     </h2>
   </div>
-  <FiveDayWeather :forecast="forecast" :loading="loading" />
+  <FiveDayWeather v-if="forecast && !loading" :forecast="forecast" :loading="loading" />
+  <VueSpinnerDots v-if="!forecast && loading" :size="100" />
 </template>
 
 <style>
@@ -126,5 +127,11 @@ const getWeather = async (city: string) => {
     color: black;
     background-color: gray;
   }
+}
+#map {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  border-radius: 20px;
+  min-height: 700px;
 }
 </style>
