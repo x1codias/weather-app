@@ -1,5 +1,5 @@
 import App from '@/App.vue';
-import { mount } from '@vue/test-utils';
+import { flushPromises, mount } from '@vue/test-utils';
 import { expect, beforeEach, describe, it } from 'vitest';
 import { createPinia } from 'pinia';
 import { createRouter, createWebHistory } from 'vue-router';
@@ -28,6 +28,7 @@ describe('App', () => {
       }
     });
     await router.isReady();
+    router.push('/');
     await wrapper.vm.$nextTick(); // Wait for the DOM to update
   });
 
@@ -38,13 +39,12 @@ describe('App', () => {
 
   it('navigates to the home route when Home button is clicked', async () => {
     await wrapper.find('#home-btn').trigger('click');
-    await router.isReady();
     expect(router.currentRoute.value.path).toBe('/');
   });
 
   it('navigates to the history route when History button is clicked', async () => {
     await wrapper.find('#history-btn').trigger('click');
-    await router.isReady();
+    await flushPromises();
     expect(router.currentRoute.value.path).toBe('/history');
   });
 
