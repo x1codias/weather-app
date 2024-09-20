@@ -50,3 +50,12 @@
   align-content: center;
   justify-content: center;
 }
+.forecast {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  max-height: 800px;
+  overflow: auto;
+  border-radius: 20px;
+  border: 2px solid lightslategray;
+  display: flex;
+}
