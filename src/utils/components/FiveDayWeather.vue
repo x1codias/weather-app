@@ -2,6 +2,7 @@
 import moment from 'moment';
 import type { Forecast } from '@/services/weatherService';
 import { useI18n } from 'vue-i18n';
+import './styles.css';
 
 defineProps<{
   forecast: Forecast | null;
@@ -65,30 +66,3 @@ const formatDate = (date: string) => {
     </div>
   </div>
 </template>
-
-<style>
-.weather-card {
-  background-color: #ccc;
-  padding: 10px;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-}
-.forecast {
-  grid-column: 2 / 3;
-  grid-row: 2 / 3;
-  max-height: 800px;
-  overflow: auto;
-  border-radius: 20px;
-  border: 2px solid lightslategray;
-  display: flex;
-}
-.forecast-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(200px, 400px)); /* Dynamic columns */
-  grid-gap: 20px; /* Spacing between items */
-  padding: 20px;
-}
-</style>

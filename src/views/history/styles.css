@@ -1,0 +1,50 @@
+@import 'vue3-perfect-scrollbar/style.css';
+
+.ps {
+  display: flex;
+  padding: 10px 0;
+}
+.search-history {
+  grid-column: 1 / 3;
+  grid-row: 1 / 2;
+  border: 2px solid gray;
+  border-radius: 30px;
+  display: flex;
+  overflow: auto;
+  justify-content: space-between;
+}
+
+.search-history-results {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  overflow: auto;
+}
+
+.forecast-history {
+  grid-column: 1 / 3;
+  grid-row: 2 / 3;
+  background-color: lightgreen;
+}
+.delete-history-btn {
+  width: fit-content;
+  cursor: pointer;
+  border: none;
+  outline: unset;
+  background-color: transparent;
+  border-left: 2px solid gray;
+  padding: 0 16px;
+  color: gray;
+  transition: all 0.2s ease;
+  &:hover {
+    color: black;
+    background-color: gray;
+  }
+}
+#map {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  border-radius: 20px;
+  min-height: 700px;
+}

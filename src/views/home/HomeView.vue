@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { Map, Marker } from 'leaflet';
-import { type Forecast } from '../services/weatherService';
-import { useHistoryStore } from '../stores/history';
+import { type Forecast } from '../../services/weatherService';
+import { useHistoryStore } from '../../stores/history';
 import FiveDayWeather from '@/utils/components/FiveDayWeather.vue';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { fetchWeather } from '@/utils/functions/fetchWeather';
 import { useMap } from '@/utils/composables/useMap';
+import './styles.css';
+
 const city = ref('');
 const forecast = ref<Forecast | null>(null);
 const loading = ref(false);
@@ -52,44 +54,3 @@ const getWeather = async (city: string) => {
   <FiveDayWeather v-if="forecast && !loading" :forecast="forecast" :loading="loading" />
   <VueSpinnerDots v-if="!forecast && loading" />
 </template>
-
-<style>
-.search {
-  grid-column: 1 / 2;
-  grid-row: 1 / 2;
-  height: fit-content;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.search-input {
-  width: 40%;
-  height: fit-content;
-  outline: none;
-  border: none;
-  border-radius: 20px;
-  padding: 12px 10px;
-}
-.search-btn {
-  padding: 10px;
-  border-radius: 30px;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  background-color: transparent;
-  border: 2px solid gray;
-  transition: all 0.2s ease;
-  &:hover {
-    background-color: gray;
-  }
-  &:hover > svg {
-    fill: black;
-  }
-}
-#map {
-  grid-column: 1 / 2;
-  grid-row: 2 / 3;
-  border-radius: 20px;
-  min-height: 700px;
-}
-</style>

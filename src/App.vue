@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+import './styles.css';
 
 const { locale, t } = useI18n();
 const { push } = useRouter();
@@ -61,58 +62,3 @@ const changeLanguage = (lang: string) => {
     </div>
   </div>
 </template>
-
-<style>
-.btn {
-  background-color: transparent;
-  outline: none;
-  border: none;
-  padding: 4px 6px;
-  cursor: pointer;
-  color: gray;
-  transition: all 0.2s ease;
-}
-.header-btn {
-  border-bottom: 2px solid transparent;
-  &:hover {
-    background-color: gray;
-    color: black;
-  }
-}
-.header-btn-active {
-  border-bottom: 2px solid gray;
-}
-.transl-btn {
-  border: none;
-  outline: unset;
-  padding: 2px 14px;
-  background-color: transparent;
-  border: 2px solid gray;
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-.transl-btn-left {
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
-}
-.transl-btn-right {
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-}
-.transl-btn-hover:hover {
-  background-color: gray;
-}
-.transl-btn-active {
-  background-color: gray;
-}
-.grid-container {
-  padding: 60px 40px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto 1fr;
-  column-gap: 14px;
-  row-gap: 24px;
-  align-content: center;
-  justify-content: center;
-}
-</style>
