@@ -37,13 +37,14 @@ const getWeather = async (city: string) => {
       :placeholder="t('searchCity')"
       @keyup.enter="getWeather(city)"
       :disabled="loading"
+      id="search-input"
     />
-    <button class="search-btn" :disabled="loading" @click="getWeather(city)">
+    <button id="search-btn" class="search-btn" :disabled="loading" @click="getWeather(city)">
       <v-icon name="fa-search" fill="gray" />
     </button>
   </div>
   <div id="map"></div>
-  <div class="forecast" v-if="!forecast && !loading">
+  <div id="no-forecast-data" class="forecast" v-if="!forecast && !loading">
     <h2 style="align-self: center; margin: 0 auto">
       {{ t('searchFirst') }}
     </h2>

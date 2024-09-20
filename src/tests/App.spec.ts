@@ -1,5 +1,5 @@
 import App from '@/App.vue';
-import { flushPromises, mount } from '@vue/test-utils';
+import { flushPromises, mount, VueWrapper } from '@vue/test-utils';
 import { expect, beforeEach, describe, it } from 'vitest';
 import { createPinia } from 'pinia';
 import { createRouter, createWebHistory } from 'vue-router';
@@ -19,7 +19,7 @@ const router = createRouter({
 const pinia = createPinia();
 
 describe('App', () => {
-  let wrapper: any;
+  let wrapper: VueWrapper;
 
   beforeEach(async () => {
     wrapper = mount(App, {

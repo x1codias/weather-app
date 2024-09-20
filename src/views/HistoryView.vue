@@ -52,9 +52,10 @@ const getWeather = async (city: string) => {
     >
       <div
         style="padding: 10px"
-        v-for="search in searchResults"
+        v-for="(search, index) in searchResults"
         :key="search.date"
         @click="getWeather(search.city)"
+        :id="`search-${index}`"
       >
         <p
           style="
@@ -69,12 +70,17 @@ const getWeather = async (city: string) => {
         </p>
       </div>
     </PerfectScrollbar>
-    <button v-if="searchResults.length" @click="resetSearch" class="delete-history-btn">
+    <button
+      id="reset-history-btn"
+      v-if="searchResults.length"
+      @click="resetSearch"
+      class="delete-history-btn"
+    >
       <h3 style="font-weight: 600">{{ t('resetHistory') }}</h3>
     </button>
   </div>
   <div id="map"></div>
-  <div class="forecast" v-if="!forecast && !loading">
+  <div id="no-forecast-data" class="forecast" v-if="!forecast && !loading">
     <h2 style="align-self: center; margin: 0 auto">
       {{ t('searchFirst') }}
     </h2>
